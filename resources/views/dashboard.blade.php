@@ -10,32 +10,64 @@
   <script src="//unpkg.com/alpinejs" defer></script>
 </head>
 
-<body class="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 py-10 px-4 text-white">
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
 
-  <div class="max-w-5xl mx-auto bg-linear-to-br from-slate-800/80 via-slate-900/80 to-slate-800/80 backdrop-blur-lg p-8 rounded-2xl shadow-2xl border border-white/10">
+  <div class="min-h-screen py-8 px-4">
 
-    <!-- Header -->
-    <div class="text-center mb-6">
-      <h1 class="text-4xl font-extrabold bg-linear-to-rrom-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-        💰 Catatan Keuangan
-      </h1>
+    <!-- Header dengan Navbar -->
+    <div class="max-w-6xl mx-auto mb-8">
+      <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+        <div class="flex items-center justify-between">
+          
+          <!-- Logo & Title -->
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <div>
+              <h1 class="text-2xl font-bold text-gray-800">Catatan Keuangan</h1>
+              <p class="text-sm text-gray-500">Dashboard Keuangan Pribadi</p>
+            </div>
+          </div>
+
+          <!-- User Info & Logout -->
+          <div class="flex items-center gap-4">
+            <div class="hidden md:flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+              <img 
+                src="https://api.dicebear.com/8.x/bottts/svg?seed={{ Auth::user()->name }}"
+                class="w-10 h-10 rounded-full border-2 border-white shadow-md"
+                alt="avatar"
+              >
+              <div>
+                <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
+                <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              id="logout-button"
+              class="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-red-500 to-pink-500 
+                     hover:from-red-600 hover:to-pink-600 
+                     text-white font-semibold rounded-xl shadow-md hover:shadow-lg
+                     transition-all duration-200 active:scale-95"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+              </svg>
+              <span class="hidden sm:inline">Keluar</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
     </div>
 
-    <!-- Komponen Livewire utama -->
-    <livewire:catatan-index />
-
-    <!-- Tombol Logout -->
-    <div class="flex justify-center mt-10">
-      <button
-        type="button"
-        id="logout-button"
-        class="px-6 py-3 bg-linear-to-r from-rose-500 to-pink-600 
-               hover:from-rose-600 hover:to-pink-700 
-               text-white font-semibold rounded-xl shadow-lg 
-               border border-white/20 transition-all"
-      >
-        🚪 Keluar
-      </button>
+    <!-- Main Content -->
+    <div class="max-w-6xl mx-auto">
+      <livewire:catatan-index />
     </div>
 
     <!-- Form Logout POST tersembunyi -->
@@ -56,19 +88,33 @@
     logoutButton.addEventListener('click', function (e) {
       e.preventDefault();
       Swal.fire({
-        title: 'Yakin mau keluar?',
-        text: 'Sesi kamu akan berakhir dan kamu akan diarahkan ke halaman login.',
-        icon: 'warning',
+        title: 'Yakin ingin keluar?',
+        text: 'Sesi Anda akan berakhir dan diarahkan ke halaman login.',
+        icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#f43f5e',
-        cancelButtonColor: '#475569',
-        confirmButtonText: 'Ya, Keluar',
-        cancelButtonText: 'Batal',
-        background: '#1e293b',
-        color: '#bfdbfe'
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: '✓ Ya, Keluar',
+        cancelButtonText: '✕ Batal',
+        customClass: {
+          popup: 'rounded-2xl',
+          confirmButton: 'rounded-xl px-6 py-2.5 font-semibold',
+          cancelButton: 'rounded-xl px-6 py-2.5 font-semibold'
+        }
       }).then((result) => {
         if (result.isConfirmed) {
-          logoutForm.submit();
+          Swal.fire({
+            title: 'Berhasil Keluar!',
+            text: 'Sampai jumpa lagi...',
+            icon: 'success',
+            timer: 1500,
+            showConfirmButton: false,
+            customClass: {
+              popup: 'rounded-2xl'
+            }
+          }).then(() => {
+            logoutForm.submit();
+          });
         }
       });
     });
