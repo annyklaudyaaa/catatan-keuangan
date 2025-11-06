@@ -11,7 +11,7 @@ class AuthLogin extends Component
 
     public function login()
     {
-        // 1️⃣ Validasi input dulu
+        // ✅ 1. Validasi input
         $this->validate([
             'email' => 'required|email',
             'password' => 'required|min:6',
@@ -22,26 +22,22 @@ class AuthLogin extends Component
             'password.min' => 'Password minimal 6 karakter.',
         ]);
 
-        // 2️⃣ Coba login
+        // ✅ 2. Cek login
         $credentials = [
             'email' => $this->email,
             'password' => $this->password
         ];
 
         if (Auth::attempt($credentials, $this->remember)) {
+
+            // regenerate session
             session()->regenerate();
 
-            // 3️⃣ Livewire 3: pakai dispatch()
-            $this->dispatch('swal', [
-                'icon' => 'success',
-                'title' => 'Berhasil Login!',
-                'text' => 'Selamat datang kembali 👋',
-            ]);
-
+            // ✅ LANGSUNG MASUK DASHBOARD TANPA POPUP
             return redirect()->intended('/dashboard');
         }
 
-        // 4️⃣ Jika gagal
+        // ✅ 3. Jika gagal baru muncul notif error
         $this->dispatch('swal', [
             'icon' => 'error',
             'title' => 'Login Gagal',
